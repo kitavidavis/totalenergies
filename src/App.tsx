@@ -1,5 +1,4 @@
 import React, { useState} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Dashboard from './dashboard';
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core';
@@ -7,7 +6,7 @@ import { useColorScheme } from '@mantine/hooks';
 
 function App() {
   const preferredColorScheme = useColorScheme();
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(preferredColorScheme);
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('dark');
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 
