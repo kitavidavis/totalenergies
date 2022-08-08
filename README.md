@@ -1,6 +1,6 @@
 # TotalEnergies
 
-A dashboard mapping local total energies service stations and their proximity to police stations [See running app](https://totalenergies.vercel.app).
+A dashboard for mapping total energies service stations and their proximity to police stations [See running app](https://totalenergies.vercel.app).
 
 ## Available Scripts
 
