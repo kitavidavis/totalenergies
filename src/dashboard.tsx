@@ -31,6 +31,7 @@ import { Search } from 'tabler-icons-react';
 import Total from './TotaEnergy';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import L, { LatLngExpression } from "leaflet"
+import Police from './PoliceStations';
 
 const accessToken = 'pk.eyJ1IjoiZGF2aXNraXRhdmkiLCJhIjoiY2w0c2x2NjNwMGRvbDNrbGFqYW9na2NtaSJ9.q5rs7WMJE8oaBQdO4zEAcg';
 
@@ -172,8 +173,8 @@ export default function Dashboard() {
 
               <div>
               <Title style={{color: '#94D82D'}} order={5}>Using this dashboard</Title>
-              <Text size='sm'><i>TotalEnergies</i> service stations are denoted with <span style={{color: '#FAB005'}} >yellow</span> markers. Administrative units
-              are denoted with <span style={{color: '#FA5252'}}>red</span> markers. To view information about a particular station, click on the marker. To establish a route between two points, click the two points.
+              <Text size='sm'><i>TotalEnergies</i> service stations are denoted with <span style={{color: '#FAB005'}} >yellow</span> markers. Police units
+              are denoted with <span style={{color: 'blue'}}>blue</span> markers. To view information about a particular station, click on the marker. To establish a route between two points, click the two points.
               <br /> By using the filters on the header, the summary information can further be filtered by:<List style={{marginLeft: 'auto', marginRight: 'auto'}}><List.Item>County</List.Item> <List.Item>Administrative unit</List.Item></List></Text>
               </div>
             </Group>
@@ -186,6 +187,18 @@ export default function Dashboard() {
     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     url={ theme.colorScheme === "dark" ? "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"}
   />
+  <GeoJSON data={Police} pointToLayer={(f, latlng) => {
+    return new L.CircleMarker(latlng, {
+      opacity: 1,
+      fillOpacity: 1,
+      weight: 2,
+      color: "blue",
+      fillColor: "blue",
+      radius: 7
+    })
+  }} onEachFeature={(f, l) => {
+      l.bindPopup("<table><tr><td>Name</td><td>"+f.properties.name+"</td></tr></table>")
+  }} />
   <GeoJSON data={Total} pointToLayer={(f, latLng) => {
           return new L.CircleMarker(latLng, {
             opacity: 1,
