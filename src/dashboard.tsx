@@ -25,9 +25,12 @@ import {
 } from '@mantine/core';
 import { useColorScheme, useScrollLock, useViewportSize } from '@mantine/hooks';
 import { SwitchToggle } from './ToggleTheme';
-import ReactMapboxGl from 'react-mapbox-gl';
+import ReactMapboxGl, {GeoJSONLayer} from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Search } from 'tabler-icons-react';
+import Total from './Amenities/TotalEnergies/TotaEnergyl';
+import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import L, { LatLngExpression } from "leaflet"
 
 const accessToken = 'pk.eyJ1IjoiZGF2aXNraXRhdmkiLCJhIjoiY2w0c2x2NjNwMGRvbDNrbGFqYW9na2NtaSJ9.q5rs7WMJE8oaBQdO4zEAcg';
 
@@ -41,6 +44,7 @@ export default function Dashboard() {
   const [county, setCounty] = useState('');
   const [mopened, setMOpened] = useState(false);
   const [unit, setUnit] = useState('');
+  const [feature, setFeature] = useState<any>(null);
   const Map = ReactMapboxGl({
     accessToken: accessToken
   });
@@ -177,43 +181,48 @@ export default function Dashboard() {
         </Grid.Col>
         <Grid.Col span={12}>
         <Card style={{height: height - 100}} shadow='sm'>
-            <Map
-          style="mapbox://styles/mapbox/dark-v10"
-          containerStyle={{
-            height: '100%',
-            width: '100%'
-          }}
-          center={[36.754, -1.234]}
-          zoom={[0]}
-        >
+        <MapContainer center={[-1.234,36.754]} style={{height: '100%', width: '100%'}} zoom={6}>
+  <TileLayer
+    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    url={ theme.colorScheme === "dark" ? "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png" : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+  />
+  <GeoJSON data={Total} pointToLayer={(f, latLng) => {
+          return new L.CircleMarker(latLng, {
+            opacity: 1,
+            fillOpacity: 1,
+            weight: 2,
+            color: '#94D82D',
+            fillColor: '#94D82D',
+            radius: 7
+          })
+        }} onEachFeature={(f, l) => {
+          l.on("mouseover", function(e){
+            e.target.setStyle({
+              color: "red",
+              fillColor: 'red'
+            });
 
-        </Map>
+            setFeature(f);
+          });
+
+          l.on("mouseout", function(e){
+            e.target.setStyle({
+              color: "#94D82D",
+              fillColor: '#94D82D'
+            })
+
+            setFeature(null);
+          });
+
+        }} />
+</MapContainer>
             </Card>
         </Grid.Col>
         <Grid.Col span={6}>
         <Card style={{height: height - 100}} shadow='sm' p={'md'}>
-        <Box
-      sx={(theme) => ({
-        height: ((height - 100) / 2) - 10,
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
-        padding: theme.spacing.xl,
-        marginBottom: 10,
-        borderRadius: theme.radius.md,
-
-        '&:hover': {
-          backgroundColor:
-            theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[1],
-        },
-      })}
-    >
-      <ScrollArea style={{height: ((height - 100) / 2) - 30 }}>
-        <Text align='center' >Routes & Instructions</Text>
-      </ScrollArea>
-    </Box>
-
     <Box
       sx={(theme) => ({
-        height: ((height - 100) / 2) - 20,
+        height: '100%',
         marginBottom: 10,
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[0],
         padding: theme.spacing.xl,
@@ -225,7 +234,16 @@ export default function Dashboard() {
         },
       })}
     >
-      <Text align='center'> Summary Info</Text>
+      <Title style={{color: '#94D82D'}} order={5}> Summary Info</Title>
+      {feature !== null ? (
+        <>
+        <Text size='sm'>Name:<i>{feature.properties.name}</i></Text>
+        <Text size='sm'>Brand:<i>{feature.properties.brand}</i></Text>
+        <Text size='sm'>Amenity:<i>{feature.properties.amenity}</i></Text>
+        </>
+      ) : (
+        <Text size='sm'><i>Hover over a point to see its properties.</i></Text>
+      )}
     </Box>
         </Card>
         </Grid.Col>
