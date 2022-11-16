@@ -204,8 +204,8 @@ export default function Dashboard() {
             opacity: 1,
             fillOpacity: 1,
             weight: 2,
-            color: '#94D82D',
-            fillColor: '#94D82D',
+            color: 'orange',
+            fillColor: 'orange',
             radius: 7
           })
         }} onEachFeature={(f, l) => {
@@ -220,8 +220,8 @@ export default function Dashboard() {
 
           l.on("mouseout", function(e){
             e.target.setStyle({
-              color: "#94D82D",
-              fillColor: '#94D82D'
+              color: "orange",
+              fillColor: 'orange'
             })
 
             setFeature(null);
