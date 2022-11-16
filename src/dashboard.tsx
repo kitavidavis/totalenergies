@@ -28,7 +28,7 @@ import { SwitchToggle } from './ToggleTheme';
 import ReactMapboxGl, {GeoJSONLayer} from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Search } from 'tabler-icons-react';
-import Total from './Amenities/TotalEnergies/TotaEnergy';
+import Total from './TotaEnergy';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import L, { LatLngExpression } from "leaflet"
 
